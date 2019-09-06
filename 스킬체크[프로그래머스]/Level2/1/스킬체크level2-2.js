@@ -28,39 +28,26 @@ weight는 1 이상 10,000 이하입니다.
 truck_weights의 길이는 1 이상 10,000 이하입니다.
 모든 트럭의 무게는 1 이상 weight 이하입니다.
 */
-function solution(bridgeLength, weight, truckWeights) {
-  var answer = 0;
-  const bridge = [];
-  let curWeights = 0;
-  while (
-    truckWeights.length > 0 ||
-    bridge.reduce((prev, cur) => prev + cur, 0) > 0
-  ) {
-    answer++; // 초를 증가
-    if (weight >= curWeights + truckWeights[0]) {
-      let thisTruck = truckWeights.shift();
-      bridge.unshift(thisTruck);
-      curWeights += thisTruck;
-    } else {
-      bridge.unshift(0);
+export function solution(bridgeLength, weight, truckWeights) {
+    var answer = 0;
+    const bridge = [];
+    let curWeights = 0;
+    while (truckWeights.length > 0 ||
+        bridge.reduce((prev, cur) => prev + cur, 0) > 0) {
+        if (weight > curWeights + truckWeights[0]) {
+            bridge.push(truckWeights.shift());
+        }
+        else {
+            bridge.push(0);
+        }
+        answer++; // 초를 증가
+        // 다 건넌 트럭은 제거
+        if (bridge.length > bridgeLength) {
+            bridge.pop();
+        }
     }
-
-    // 트럭이 건넘과 동시에 투입
-    // 다 건넌 트럭은 제거
-    if (
-      typeof truckWeights[0] !== "undefined" &&
-      weight <= curWeights + truckWeights[0] &&
-      bridge.length > bridgeLength
-    ) {
-      curWeights += bridge.unshift(truckWeights.shift());
-    }
-    if (bridge.length > bridgeLength) {
-      curWeights -= bridge.pop();
-    }
-  }
-  return answer;
+    return answer;
 }
 console.log(solution(2, 10, [7, 4, 5, 6]));
-console.log(solution(20, 20, [10]));
 console.log(solution(100, 100, [10]));
 console.log(solution(100, 100, [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]));
