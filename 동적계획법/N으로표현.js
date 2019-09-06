@@ -17,37 +17,35 @@ number는 1 이상 32,000 이하입니다.
 최솟값이 8보다 크면 -1을 return 합니다.
  */
 (() => {
-  function solution(N, number) {
-    var answer = -1;
-    solve(N, 0, 0);
-    return answer;
-    function solve(N, cnt, val) {
-      if (cnt > 8) {
-        return;
-      }
-      if (val === number) {
-        if (cnt < answer || answer === -1) {
-          answer = cnt;
+    function solution(N, number) {
+        var answer = -1;
+        solve(N, 0, 0);
+        return answer;
+        function solve(N, cnt, val) {
+            if (cnt > 8) {
+                return;
+            }
+            if (val === number) {
+                if (cnt < answer || answer === -1) {
+                    answer = cnt;
+                }
+                return;
+            }
+            var nn = 0;
+            for (var i = 1; i <= 8; i++) {
+                nn = nn * 10 + N;
+                solve(N, cnt + i, val + nn);
+                solve(N, cnt + i, val - nn);
+                solve(N, cnt + i, val * nn);
+                solve(N, cnt + i, Math.floor(val / nn));
+            }
         }
-        return;
-      }
-      var nn = 0;
-      for (var i = 1; i <= 8; i++) {
-        nn = nn * 10 + N;
-        solve(N, cnt + i, val + nn);
-        solve(N, cnt + i, val - nn);
-        solve(N, cnt + i, val * nn);
-        solve(N, cnt + i, parseInt(val / nn));
-      }
     }
-  }
-  let N = 5,
-    number = 12;
-  console.log(solution(N, number));
-  //   (N = 2), (number = 11);
-  //   console.log(solution(N, number));
+    let N = 5, number = 12;
+    console.log(solution(N, number));
+    (N = 2), (number = 11);
+    console.log(solution(N, number));
 })();
-
 /** 더 나은 풀이
 function solution(N, number) {
     const cache = new Array(9).fill(0).map(el => new Set());
@@ -63,7 +61,7 @@ function solution(N, number) {
                 }
             }
         }
-        if(cache[i].has(number)) return i; 
+        if(cache[i].has(number)) return i;
     }
     return -1;
 }
