@@ -13,14 +13,10 @@ function solution(n = 1) {
   if (n === 2) {
     return 7;
   }
-  if (n === 3) {
-    return 3 * 2 + 4;
-  }
-  // n >= 4
+  // n >= 3
   // 붙인 타일의 둘레 = 마지막 타일의 세변 길이의 합 + 직전 타일의 두변 길이의 합 + 전전 타일의 두변 길이의 합 + 전전전 타일의 변
-  if (n >= 4) {
-    return 3 * tiles[n] + 2 * (tiles[n - 1] + tiles[n - 2]) + tiles[n - 3];
-  }
+  // tiles[i] = tiles[i - 2] + tiles[i - 1] 이므로 최적화하면 아래임
+  return 6 * tiles[n - 1] + 4 * tiles[n - 2];
 }
 
 /*
@@ -44,4 +40,6 @@ solution 함수를 작성하시오.
 let n = 5;
 console.log(solution(n));
 n = 6;
+console.log(solution(n));
+n = 3;
 console.log(solution(n));
