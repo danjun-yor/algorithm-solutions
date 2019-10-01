@@ -1,29 +1,36 @@
-function solution(clothes = []) {
+function solution(genres = [], plays = []) {
+  // 속한 노래가 가장 많이 재생된 장르를 먼저 수록
   const map = new Map();
-
-  for (let cloth of clothes) {
-    const [name, type] = cloth;
-    if (map.has(type)) {
-      map.get(type).push(name);
+  for (let i = 0; i < genres.length; i++) {
+    if (!map.has(genres[i])) {
+      map.set(genres[i], {
+        list: [[plays[i], i]],
+        total: plays[i]
+      });
     } else {
-      map.set(type, [name]);
+      const genre = map.get(genres[i]);
+      genre["list"].push([plays[i], i]);
+      genre["total"] += plays[i];
     }
   }
-
-  return (
-    [...map.values()].reduce((prev, cur) => prev * (cur.length + 1), 1) - 1
+  const sortedGenres = [...map.values()].sort((a, b) => b.total - a.total);
+  const sortedPlayes = sortedGenres.map(v =>
+    v.list.sort((a, b) => {
+      const order = b[0] - a[0];
+      if (order === 0) {
+        return a[1] - b[1];
+      }
+      return order;
+    })
   );
+  const answer = [];
+  for (let play of sortedPlayes) {
+    answer.push(...play.slice(0, 2).map(v => v[1]));
+  }
+
+  return answer;
 }
 
-let clothes = [
-  ["yellow_hat", "headgear"],
-  ["blue_sunglasses", "eyewear"],
-  ["green_turban", "headgear"]
-];
-console.log(solution(clothes));
-clothes = [
-  ["crow_mask", "face"],
-  ["blue_sunglasses", "face"],
-  ["smoky_makeup", "face"]
-];
-console.log(solution(clothes));
+let genres = ["classic", "pop", "classic", "classic", "pop"],
+  plays = [500, 600, 150, 800, 2500];
+console.log(solution(genres, plays));
